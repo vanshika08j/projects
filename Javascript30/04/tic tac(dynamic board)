@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .tic-tac{
+
+        }
+        .tic-tac .row{
+            display: flex;
+        }
+        .tic-tac .cell{
+            width: 35px;
+            height: 35px;
+            border: 1px solid black;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="tic-tac"></div>
+ <script>
+    
+    const gridsize=8;
+    let currplayer='X';
+    const response=[];
+    const board=document.querySelector('.tic-tac');
+    function createBoard(){
+    for(let j=0;j<gridsize;j++){
+     const row =document.createElement('div');
+     row.className='row';
+     board.appendChild(row);
+    
+     for(let i=0;i<gridsize;i++)
+     {
+     const  cell=document.createElement('div');
+     cell.className='cell'; 
+     cell.setAttribute('d-row',i);
+     cell.setAttribute('d-cell',j);
+     row.appendChild(cell);
+       }
+
+     document.querySelector('.tic-tac').appendChild(row);
+      }
+    }
+         function changePlayer(){
+        if (currplayer==='X')
+        currplayer='O';
+         else
+       currplayer='X';
+          }
+
+    function addListener(){
+      const board=document.querySelector('.tic-tac');  
+      board.addEventListener('click',function(e){
+        if(e.target.nodeName==='DIV'){
+        if(e.target.classList.contains('cell')){
+
+
+        e.target.innerText = currplayer;
+        
+        
+    const rowID =e.target.dataset.row;
+    const cellid=e.target.dataset.cell;
+    updategame(rowID,cellid,currplayer);
+    
+changePlayer();
+    
+        }
+    }
+});
+    }
+    function getWinner(){
+        //checkrow
+      for(let i=0;i<response.length;i++)
+      {
+        if(check(response[i]))
+        return true;
+      }
+
+//columns
+      for(i=0;i<response.length;i++)
+      { const colval=response.map(row=>row[i])
+        if(check(colval))
+        return true;
+      }
+//diagonal
+      for(i=0;i<response.length;i++)
+      { const digval=response.map((row,idx)=>row[idx])
+        if(check(digval)){
+        return true;}
+        const revdigval=response.map(row,idx=>row[response-i-1])
+        if(check(revdigval)){
+        return true;}
+      }
+                    
+    }
+    function check(arr){
+        return arr.every((data)=>arr[0]===data && data!==undefined)
+    }
+    function updategame(r,c,val){
+        if(!response[r]){
+            response[r]=[];
+        }
+        response[r][c]=val;
+
+    }
+ function minesweeper(){
+    const options=['*','+','-'];
+    const random=Math.floor((Math.random()*10))%3;
+    return options[random];
+ }
+    
+    
+createBoard();
+addListener();
+getWinner();
+
+ </script>   
+</body>
+</html>  
